@@ -1,0 +1,179 @@
+<head>
+  <title>Nesara Cultural Club Events</title>
+</head>
+
+<style>
+  .full-page {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #fffaf0;
+    color: #3e2723;
+    padding: 12px;
+    margin: 0;
+  }
+  .heading {
+    text-align: center;
+    background: #ff6f00;
+    color: white;
+    padding: 18px 12px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 6px rgba(230, 81, 0, 0.2);
+  }
+  .heading h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  .section {
+    margin-bottom: 25px;
+    padding: 15px 12px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+ 
+  .now-color { border-left: 6px solid #d32f2f; }
+  .upcoming-color { border-left: 6px solid #2e7d32; }
+  .all-color { border-left: 6px solid #1565c0; }
+
+  .section h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.35rem;
+    letter-spacing: 0.5px;
+  }
+  .event-row {
+    border-left: 4px solid #aaaaaa;
+    padding: 12px 10px;
+    margin: 10px 0 0 0;
+    background: #fafafa;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.02);
+  }
+  .event-row a {
+    color: #1565c0;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .event-row a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  const UPCOMING_WINDOW_MINUTES = 1440;
+
+  const rawSchedule = `
+2026-09-12 16:00;2026-09-12 19:30;Badminton Kids;Badminton Court;7841967022;Chaitanya Shete
+2026-09-12 19:40;2026-09-12 21:30;Badminton Mix/Mens Doubles (Adults);Badminton Court;7841967022;Chaitanya Shete
+2026-09-13 09:30;2026-09-13 12:00;Dodgeball Kids;Main Gate;7841967022;Chaitanya Shete
+2026-09-13 13:00;2026-09-13 15:00;Langdi Kids;Main Gate;7841967022;Chaitanya Shete
+2026-09-13 15:00;2026-09-13 16:00;Kho Kho (Kids);Main Gate;7841967022;Chaitanya Shete
+2026-09-14 15:30;2026-09-14 17:30;Dhol;Main Gate;9850528021;Shweta Toro
+2026-09-14 17:30;2026-09-14 18:15;Lezim;Main Gate;9850528021;Shweta Toro
+2026-09-14 18:15;2026-09-14 19:30;Sthapana;Lobby;9850528021;Shweta Toro
+2026-09-15 20:00;2026-09-15 21:00;Aatharvashirsha Pathan;Lobby;96047883366;Manasi Gole
+2026-09-17 20:00;2026-09-17 21:00;Drawing Competition;Lobby;9860767508;Sonal Jaipuriya
+2026-09-18 19:00;2026-09-18 21:30;Carrom (Adults);Game Zone;7841967022;Chaitanya Shete
+2026-09-18 19:00;2026-09-18 21:30;Chess (Kids + Adults);Game Zone;7841967022;Chaitanya Shete
+2026-09-19 09:00;2026-09-19 10:00;Slow Cycling Kids;Main Gate;7841967022;Chaitanya Shete
+2026-09-19 10:00;2026-09-19 11:00;Running Relay Kids;Main Gate;7841967022;Chaitanya Shete
+2026-09-19 11:00;2026-09-19 12:00;Lemon & Spoon Race (Kids + Adults);Main Gate;7841967022;Chaitanya Shete
+2026-09-19 12:00;2026-09-19 13:30;Scavenger Hunt (Kids + Adults);Main Gate;7841967022;Chaitanya Shete
+2026-09-19 19:00;2026-09-19 19:30;Fashion Show; Parking 5;9090899535;Rucha Gajalkar
+2026-09-19 19:30;2026-09 19 21:00;Karaoke Night; Parking 5;9850212580;Manasi Deshpande
+2026-09-20 09:00;2026-09-20 14:00;Badminton Mix/Mens Doubles (Adults);Badminton Court;7841967022;Chaitanya Shete
+2026-09-20 09:00;2026-09-20 11:30;Table Tennis (Adults);Game Zone;7841967022;Chaitanya Shete
+2026-09-20 12:00;2026-09-20 13:00;Cooking compition;Lobby;9850212580;Manasi Tendulkar
+2026-09-20 18:00;2026-09-20 21:00;Cultural Event;Parking 5;9860007734;Pallavi Patil
+2026-09-21 19:00;2026-09-21 21:00;Bhajan Sandhya;Parking 5;9604788336;Manasi Gole
+2026-09-23 19:00;2026-09-23 21:00;Musical Chair and Hossie Night;Main Gate;9604788336;Manasi Gole
+2026-09-24 19:00;2026-09-24 22:00;Satyanarayan Pooja / Prize Distribution; Lobby;9604788336;Manasi Gole
+2026-09-25 16:00;2026-09-25 18:00;Final Arati/ Prcocession/ Dhol Immersion;Main Gate;9850528021;Shweta Toro
+        `;
+
+  function displayDate(dateObj) {
+    return dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  }
+
+  function displayDay(dateObj) {
+    return dateObj.toLocaleDateString('en-IN', { weekday: 'short' });
+  }
+
+  function displayTime(dateObj) {
+    return dateObj.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
+  function updateDashboard() {
+    const now = new Date();
+
+    const upcomingCutoff = new Date(now.getTime() + (UPCOMING_WINDOW_MINUTES * 60 * 1000));
+
+    let liveHtml = "";
+    let upcomingHtml = "";
+    let allHtml = "";
+     
+    const lines = rawSchedule.trim().split('\n');
+    for (const line of lines) {
+      if (!line.trim()) continue;
+
+      const [startStr, endStr, name, venue, phone, contact] = line.split(';');
+     
+      // Native Parsing: Browsers understand this hyphen layout instantly with zero extra functions!
+      const startTime = new Date(startStr);
+      const endTime = new Date(endStr);
+
+      const card = `
+        <div class="event-row">
+          <big><strong>Event: ${name}</strong></big><br>
+          <strong>Date:</strong> ${displayDay(startTime)}, ${displayDate(startTime)}, <strong>Time:</strong> ${displayTime(startTime)} to ${displayTime(endTime)}<br>
+          <strong>Venue:</strong> ${venue}<br>
+          <strong>Contact:</strong> <a href='tel:${phone}'>${phone}</a> (${contact})
+        </div>
+        `;
+
+      allHtml += card;
+
+      if (now >= startTime && now <= endTime) {
+        liveHtml += card;
+      }
+      else if (startTime > now && startTime <= upcomingCutoff) {
+        upcomingHtml += card;
+      }
+    }
+     
+    document.getElementById('live-events').innerHTML = liveHtml || "-";
+    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "-";
+    document.getElementById('all-events').innerHTML = allHtml;
+    document.getElementById('clock').innerText = "⏱️ Current Time: " + now.toLocaleString('en-IN');
+
+  }
+   
+  function refreshDashboard() {
+    updateDashboard();
+    setInterval(updateDashboard, 5000);
+  }
+</script>
+
+<body class="full-page" onload="refreshDashboard();">
+  <div class="heading">
+    <h1>Nesara Cultural Club Events</h1>
+    <div id="clock"></div>
+  </div>
+
+  <div class="section now-color">
+    <h2>HAPPENING NOW</h2>
+    <div id="live-events"></div>
+  </div>
+
+  <div class="section upcoming-color">
+    <h2>UPCOMING EVENTS</h2>
+    <div id="upcoming-events"></div>
+  </div>
+
+  <div class="section all-color">
+    <h2>ALL EVENTS</h2>
+    <div id="all-events"></div>
+  </div>
+</body>
