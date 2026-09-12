@@ -31,9 +31,9 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
  
-  .now-color { border-left: 6px solid #d32f2f; }
-  .upcoming-color { border-left: 6px solid #2e7d32; }
-  .all-color { border-left: 6px solid #1565c0; }
+  .now-color { border-left: 6px solid #2e7d32; ; color: #2e7d32}
+  .upcoming-color { border-left: 6px solid #d32f2f; color: #d32f2f}
+  .all-color { border-left: 6px solid #1565c0; color: #1565c0}
 
   .section h2 {
     margin-top: 0;
@@ -42,6 +42,7 @@
     letter-spacing: 0.5px;
   }
   .event-row {
+    color: #000000;
     border-left: 4px solid #aaaaaa;
     padding: 20px 15px;
     margin: 15px 0 0 0;
@@ -51,46 +52,39 @@
     line-height: 1.45;
     box-shadow: inset 0 0 4px rgba(0,0,0,0.02);
   }
-  .event-row a {
-    color: #1565c0;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  .event-row a:hover {
-    text-decoration: underline;
-  }
 </style>
 
 <script>
   const UPCOMING_WINDOW_MINUTES = 1440;
 
   const rawSchedule = `
-2026-09-12 16:00;2026-09-12 19:30;Badminton Kids;Badminton Court;7841967022;Chaitanya Shete
-2026-09-12 19:40;2026-09-12 21:30;Badminton Mix/Mens Doubles (Adults);Badminton Court;7841967022;Chaitanya Shete
-2026-09-13 09:30;2026-09-13 12:00;Dodgeball Kids;Main Gate;7841967022;Chaitanya Shete
-2026-09-13 13:00;2026-09-13 15:00;Langdi Kids;Main Gate;7841967022;Chaitanya Shete
-2026-09-13 15:00;2026-09-13 16:00;Kho Kho (Kids);Main Gate;7841967022;Chaitanya Shete
-2026-09-14 15:30;2026-09-14 17:30;Dhol;Main Gate;9850528021;Shweta Toro
-2026-09-14 17:30;2026-09-14 18:15;Lezim;Main Gate;9850528021;Shweta Toro
-2026-09-14 18:15;2026-09-14 19:30;Sthapana;Lobby;9850528021;Shweta Toro
-2026-09-15 20:00;2026-09-15 21:00;Aatharvashirsha Pathan;Lobby;96047883366;Manasi Gole
-2026-09-17 20:00;2026-09-17 21:00;Drawing Competition;Lobby;9860767508;Sonal Jaipuriya
-2026-09-18 19:00;2026-09-18 21:30;Carrom (Adults);Game Zone;7841967022;Chaitanya Shete
-2026-09-18 19:00;2026-09-18 21:30;Chess (Kids + Adults);Game Zone;7841967022;Chaitanya Shete
-2026-09-19 09:00;2026-09-19 10:00;Slow Cycling Kids;Main Gate;7841967022;Chaitanya Shete
-2026-09-19 10:00;2026-09-19 11:00;Running Relay Kids;Main Gate;7841967022;Chaitanya Shete
-2026-09-19 11:00;2026-09-19 12:00;Lemon & Spoon Race (Kids + Adults);Main Gate;7841967022;Chaitanya Shete
-2026-09-19 12:00;2026-09-19 13:30;Scavenger Hunt (Kids + Adults);Main Gate;7841967022;Chaitanya Shete
-2026-09-19 19:00;2026-09-19 19:30;Fashion Show; Parking 5;9090899535;Rucha Gajalkar
-2026-09-19 19:30;2026-09 19 21:00;Karaoke Night; Parking 5;9850212580;Manasi Deshpande
-2026-09-20 09:00;2026-09-20 14:00;Badminton Mix/Mens Doubles (Adults);Badminton Court;7841967022;Chaitanya Shete
-2026-09-20 09:00;2026-09-20 11:30;Table Tennis (Adults);Game Zone;7841967022;Chaitanya Shete
-2026-09-20 12:00;2026-09-20 13:00;Cooking compition;Lobby;9850212580;Manasi Tendulkar
-2026-09-20 18:00;2026-09-20 21:00;Cultural Event;Parking 5;9860007734;Pallavi Patil
-2026-09-21 19:00;2026-09-21 21:00;Bhajan Sandhya;Parking 5;9604788336;Manasi Gole
-2026-09-23 19:00;2026-09-23 21:00;Musical Chair and Hossie Night;Main Gate;9604788336;Manasi Gole
-2026-09-24 19:00;2026-09-24 22:00;Satyanarayan Pooja / Prize Distribution; Lobby;9604788336;Manasi Gole
-2026-09-25 16:00;2026-09-25 18:00;Final Arati/ Prcocession/ Dhol Immersion;Main Gate;9850528021;Shweta Toro
+2026-09-12 16:00;2026-09-12 19:30;Badminton Kids;Badminton Court
+2026-09-12 19:40;2026-09-12 21:30;Badminton Mix Doubles (Adults);Badminton Court
+2026-09-13 09:30;2026-09-13 12:00;Dodgeball Kids;Main Gate
+2026-09-13 13:00;2026-09-13 15:00;Langdi Kids;Main Gate
+2026-09-13 15:00;2026-09-13 16:00;Kho Kho (Kids);Main Gate
+2026-09-14 15:30;2026-09-14 17:30;Dhol;Main Gate
+2026-09-14 17:30;2026-09-14 18:15;Lezim;Main Gate
+2026-09-14 18:15;2026-09-14 19:30;Sthapana;Lobby
+2026-09-15 20:00;2026-09-15 21:00;Atharvashirsha Pathan;Lobby
+2026-09-17 20:00;2026-09-17 21:00;Drawing Competition;Lobby
+2026-09-18 19:00;2026-09-18 21:30;Carrom (Adults);Game Zone
+2026-09-18 19:00;2026-09-18 21:30;Chess (Kids + Adults);Game Zone
+2026-09-19 09:00;2026-09-19 10:00;Slow Cycling Kids;Main Gate
+2026-09-19 10:00;2026-09-19 11:00;Running Relay Kids;Main Gate
+2026-09-19 11:00;2026-09-19 12:00;Lemon & Spoon Race (Kids + Adults);Main Gate
+2026-09-19 12:00;2026-09-19 13:30;Scavenger Hunt (Kids + Adults);Main Gate
+2026-09-19 19:00;2026-09-19 19:30;Fashion Show; Parking 5
+2026-09-19 19:30;2026-09-19 21:00;Karaoke Night; Parking 5
+2026-09-20 09:00;2026-09-20 14:00;Badminton Mix Doubles (Adults);Badminton Court
+2026-09-20 09:00;2026-09-20 14:00;Badminton Mens Doubles (Adults);Badminton Court
+2026-09-20 09:00;2026-09-20 11:30;Table Tennis (Adults);Game Zone
+2026-09-20 12:00;2026-09-20 13:00;Cooking compition;Lobby
+2026-09-20 18:00;2026-09-20 21:00;Cultural Event;Parking 5
+2026-09-21 19:00;2026-09-21 21:00;Bhajan Sandhya;Parking 5
+2026-09-23 19:00;2026-09-23 21:00;Musical Chair and Housie Night;Main Gate
+2026-09-24 19:00;2026-09-24 22:00;Satyanarayan Pooja / Prize Distribution; Lobby
+2026-09-25 16:00;2026-09-25 18:00;Final Arati/ Prcocession/ Dhol Immersion;Main Gate
         `;
 
   function displayDate(dateObj) {
@@ -118,7 +112,7 @@
     for (const line of lines) {
       if (!line.trim()) continue;
 
-      const [startStr, endStr, name, venue, phone, contact] = line.split(';');
+      const [startStr, endStr, name, venue] = line.split(';');
      
       // Native Parsing: Browsers understand this hyphen layout instantly with zero extra functions!
       const startTime = new Date(startStr);
@@ -129,7 +123,6 @@
           <big><strong>Event: ${name}</strong></big><br>
           <strong>Date:</strong> ${displayDay(startTime)}, ${displayDate(startTime)}, <strong>Time:</strong> ${displayTime(startTime)} to ${displayTime(endTime)}<br>
           <strong>Venue:</strong> ${venue}<br>
-          <strong>Contact:</strong> <a href='tel:${phone}'>${phone}</a> (${contact})
         </div>
         `;
 
@@ -143,8 +136,8 @@
       }
     }
      
-    document.getElementById('live-events').innerHTML = liveHtml || "-";
-    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "-";
+    document.getElementById('live-events').innerHTML = liveHtml || "No events happening now.";
+    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "No upcoming events.";
     document.getElementById('all-events').innerHTML = allHtml;
     document.getElementById('clock').innerText = "⏱️ Current Time: " + now.toLocaleString('en-IN');
 
