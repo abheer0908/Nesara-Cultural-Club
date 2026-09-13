@@ -31,9 +31,10 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
  
-  .now-color { border-left: 6px solid #2e7d32; ; color: #2e7d32}
-  .upcoming-color { border-left: 6px solid #d32f2f; color: #d32f2f}
-  .all-color { border-left: 6px solid #1565c0; color: #1565c0}
+  .now-color { border-left: 6px solid #2e7d32; color: #2e7d32; }
+  .upcoming-color { border-left: 6px solid #d32f2f; color: #d32f2f; }
+  .future-color { border-left: 6px solid darkorange; color: darkorange; }
+  .past-color { border-left: 6px solid #555555; color: #555555; } /* Darker grey for clear visibility */
 
   .section h2 {
     margin-top: 0;
@@ -63,6 +64,8 @@
 2026-09-13 09:30;2026-09-13 12:00;Dodgeball Kids;Main Gate
 2026-09-13 13:00;2026-09-13 15:00;Langdi Kids;Main Gate
 2026-09-13 15:00;2026-09-13 16:00;Kho Kho (Kids);Main Gate
+2026-09-13 15:00;2026-09-13 17:00;Ganesh Idol Making - Batch 1;Lobby
+2026-09-13 18:00;2026-09-13 20:00;Ganesh Idol Making - Batch 2;Lobby
 2026-09-14 15:30;2026-09-14 17:30;Dhol;Main Gate
 2026-09-14 17:30;2026-09-14 18:15;Lezim;Main Gate
 2026-09-14 18:15;2026-09-14 19:30;Sthapana;Lobby
@@ -82,9 +85,13 @@
 2026-09-20 12:00;2026-09-20 13:00;Cooking compition;Lobby
 2026-09-20 18:00;2026-09-20 21:00;Cultural Event;Parking 5
 2026-09-21 19:00;2026-09-21 21:00;Bhajan Sandhya;Parking 5
+2026-09-22 18:00;2026-09-21 19:00;Drawing Compitition;Lobby
+2026-09-22 21:00;2026-09-21 22:00;Drum session;Parking 5
 2026-09-23 19:00;2026-09-23 21:00;Musical Chair and Housie Night;Main Gate
-2026-09-24 19:00;2026-09-24 22:00;Satyanarayan Pooja / Prize Distribution; Lobby
-2026-09-25 16:00;2026-09-25 18:00;Final Arati/ Prcocession/ Dhol Immersion;Main Gate
+2026-09-24 19:00;2026-09-24 22:00;Satyanarayan Pooja; Lobby
+2026-09-24 19:00;2026-09-24 22:00;Prize Distribution;Parking 5
+2026-09-25 16:00;2026-09-25 18:00;Final Arati;Lobby
+2026-09-25 16:00;2026-09-25 18:00;Procession/ Dhol Immersion;Main Gate
         `;
 
   function displayDate(dateObj) {
@@ -101,12 +108,12 @@
 
   function updateDashboard() {
     const now = new Date();
-
     const upcomingCutoff = new Date(now.getTime() + (UPCOMING_WINDOW_MINUTES * 60 * 1000));
 
     let liveHtml = "";
     let upcomingHtml = "";
-    let allHtml = "";
+    let futureHtml = "";
+    let pastHtml = "";
      
     const lines = rawSchedule.trim().split('\n');
     for (const line of lines) {
@@ -114,7 +121,6 @@
 
       const [startStr, endStr, name, venue] = line.split(';');
      
-      // Native Parsing: Browsers understand this hyphen layout instantly with zero extra functions!
       const startTime = new Date(startStr);
       const endTime = new Date(endStr);
 
@@ -126,21 +132,25 @@
         </div>
         `;
 
-      allHtml += card;
-
       if (now >= startTime && now <= endTime) {
         liveHtml += card;
       }
       else if (startTime > now && startTime <= upcomingCutoff) {
         upcomingHtml += card;
       }
+      else if (startTime > upcomingCutoff) {
+        futureHtml += card;
+      }
+      else if (now > endTime) {
+        pastHtml += card;
+      }
     }
      
     document.getElementById('live-events').innerHTML = liveHtml || "No events happening now.";
-    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "No upcoming events.";
-    document.getElementById('all-events').innerHTML = allHtml;
+    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "No upcoming events within 24 hours.";
+    document.getElementById('future-events').innerHTML = futureHtml || "No later future events scheduled.";
+    document.getElementById('past-events').innerHTML = pastHtml || "No past events.";
     document.getElementById('clock').innerText = "⏱️ Current Time: " + now.toLocaleString('en-IN');
-
   }
    
   function refreshDashboard() {
@@ -161,12 +171,17 @@
   </div>
 
   <div class="section upcoming-color">
-    <h2>UPCOMING EVENTS</h2>
+    <h2>UPCOMING EVENTS </h2>
     <div id="upcoming-events"></div>
   </div>
 
-  <div class="section all-color">
-    <h2>ALL EVENTS</h2>
-    <div id="all-events"></div>
+  <div class="section future-color">
+    <h2>FUTURE EVENTS</h2>
+    <div id="future-events"></div>
+  </div>
+
+  <div class="section past-color">
+    <h2>PAST EVENTS</h2>
+    <div id="past-events"></div>
   </div>
 </body>
