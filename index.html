@@ -113,8 +113,9 @@
 2026-09-24 20:00;2026-09-24 21:00;Live Orchestra;Parking 5
 2026-09-24 20:30;2026-09-24 21:30;Dinner;Parking 5
 2026-09-25 09:00;2026-09-25 09:30;Morning Arati;Lobby
-2026-09-25 16:00;2026-09-25 18:00;Final Arati;Lobby
+2026-09-25 15:30;2026-09-25 16:00;Final Arati;Lobby
 2026-09-25 16:00;2026-09-25 18:00;Procession/Dhol Pathak;Main Gate
+2026-09-25 18:30;2026-09-25 17:30;Food stalls (by residents);Club house
         `;
 
   function displayDate(dateObj) {
@@ -170,8 +171,8 @@
     }
      
     document.getElementById('live-events').innerHTML = liveHtml || "No events happening now.";
-    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "No upcoming events within 24 hours.";
-    document.getElementById('future-events').innerHTML = futureHtml || "No later future events scheduled.";
+    document.getElementById('upcoming-events').innerHTML = upcomingHtml || "No upcoming events (in next 24 hours).";
+    document.getElementById('future-events').innerHTML = futureHtml || "No future events scheduled.";
     document.getElementById('past-events').innerHTML = pastHtml || "No past events.";
     document.getElementById('clock').innerText = "⏱️ Current Time: " + now.toLocaleString('en-IN');
   }
